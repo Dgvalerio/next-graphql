@@ -82,6 +82,8 @@
       }
     ],
     "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
     "no-console": "warn",
     "require-jsdoc": "off",

@@ -5,9 +5,10 @@ interface Data {
   name: string;
 }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+type Handler = (req: NextApiRequest, res: NextApiResponse<Data>) => void;
+
+const handler: Handler = (req, res) => {
   res.status(200).json({ name: 'John Doe' });
-}
+};
+
+export default handler;
