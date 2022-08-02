@@ -1,19 +1,50 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-import User from '@/user/user.entity';
-import UserRepository from '@/user/user.repository';
+import { IResolvers } from '@graphql-tools/utils';
 
-type Handler = (req: NextApiRequest, res: NextApiResponse<User>) => void;
+import { ApolloServer, gql } from 'apollo-server-micro';
+import { RequestHandler } from 'micro';
+import Cors from 'micro-cors';
 
-const handler: Handler = async (req, res) => {
-  const repo = new UserRepository();
+const cors = Cors();
 
-  const user = await repo.create({
-    name: 'an_name',
-    email: 'an_email',
-  });
+const typeDefs = gql`
+  type Query {
+    hello: String!
+  }
+`;
 
-  res.status(200).json(user);
+const resolvers: IResolvers = {
+  Query: {
+    hello: () => 'Hello World!',
+  },
 };
 
-export default handler;
+const apolloServer = new ApolloServer({ typeDefs, resolvers });
+
+const start = apolloServer.start();
+
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void | boolean> => {
+  if (req.method === 'OPTIONS') {
+    res.end();
+
+    return false;
+  }
+
+  await start;
+
+  await apolloServer.createHandler({
+    path: '/api',
+  })(req, res);
+};
+
+export default cors(handler as RequestHandler);
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
