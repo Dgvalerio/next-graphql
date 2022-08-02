@@ -1,15 +1,15 @@
+import { Field, ID, ObjectType } from 'type-graphql';
+
+@ObjectType()
 class User {
+  @Field(() => ID)
   id: number;
 
+  @Field()
   name: string;
 
+  @Field()
   email: string;
-
-  constructor(id: number, name: string, email: string) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-  }
 }
 
 export default User;

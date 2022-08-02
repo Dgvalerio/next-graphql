@@ -1,26 +1,22 @@
+import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { IResolvers } from '@graphql-tools/utils';
+import { UserResolver } from '@/user/user.resolver';
 
-import { ApolloServer, gql } from 'apollo-server-micro';
+import { ApolloServer } from 'apollo-server-micro';
 import { RequestHandler } from 'micro';
 import Cors from 'micro-cors';
+import path from 'path';
+import { buildSchemaSync } from 'type-graphql';
 
 const cors = Cors();
 
-const typeDefs = gql`
-  type Query {
-    hello: String!
-  }
-`;
+const schema = buildSchemaSync({
+  resolvers: [UserResolver],
+  emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
+});
 
-const resolvers: IResolvers = {
-  Query: {
-    hello: () => 'Hello World!',
-  },
-};
-
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({ schema });
 
 const start = apolloServer.start();
 
