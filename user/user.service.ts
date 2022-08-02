@@ -6,6 +6,7 @@ import { SupabaseQueryBuilder } from '@supabase/supabase-js/dist/module/lib/Supa
 interface IUserRepository {
   readonly repository: SupabaseQueryBuilder<User>;
   create(user: CreateUserArgs): Promise<User>;
+  readAll(): Promise<User[]>;
 }
 
 class UserService implements IUserRepository {
@@ -19,6 +20,17 @@ class UserService implements IUserRepository {
     // const alfa = await this.repository.insert({ name: user.name });
 
     return { id: 0, ...args };
+  }
+
+  async readAll(): Promise<User[]> {
+    const { status, body } = await this.repository.select();
+
+    switch (status) {
+      case 200:
+        return body || [];
+      default:
+        return [];
+    }
   }
 }
 
