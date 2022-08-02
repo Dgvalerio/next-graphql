@@ -3,9 +3,11 @@ import { CreateUserArgs } from '@/user/types/create-user.args';
 import User from '@/user/user.entity';
 import { SupabaseQueryBuilder } from '@supabase/supabase-js/dist/module/lib/SupabaseQueryBuilder';
 
+import { UserInputError } from 'apollo-server-micro';
+
 interface IUserRepository {
   readonly repository: SupabaseQueryBuilder<User>;
-  create(user: CreateUserArgs): Promise<User>;
+  create(user: CreateUserArgs): Promise<User[]>;
   readAll(): Promise<User[]>;
 }
 
@@ -16,10 +18,22 @@ class UserService implements IUserRepository {
     this.repository = sbDB.from('user');
   }
 
-  async create(args: CreateUserArgs): Promise<User> {
-    // const alfa = await this.repository.insert({ name: user.name });
+  async create({ name, email }: CreateUserArgs): Promise<User[]> {
+    const { status, body } = await this.repository.insert({
+      name,
+      email,
+    });
 
-    return { id: 0, ...args };
+    switch (status) {
+      case 201:
+        return body || [];
+      case 409:
+        throw new UserInputError('Esse e-mail já foi utilizado!', {
+          fieldName: 'email',
+        });
+      default:
+        return [];
+    }
   }
 
   async readAll(): Promise<User[]> {
