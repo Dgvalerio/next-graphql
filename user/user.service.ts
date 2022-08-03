@@ -10,6 +10,7 @@ interface IUserRepository {
   readonly repository: SupabaseQueryBuilder<User>;
   create(user: CreateUserArgs): Promise<User[]>;
   readAll(): Promise<User[]>;
+  read(search: GetUserArgs): Promise<User[]>;
 }
 
 class UserService implements IUserRepository {
@@ -48,12 +49,12 @@ class UserService implements IUserRepository {
     }
   }
 
-  async read(partial: GetUserArgs): Promise<User[]> {
-    const [key] = Object.keys(partial) as (keyof GetUserArgs)[];
+  async read(search: GetUserArgs): Promise<User[]> {
+    const [key] = Object.keys(search) as (keyof GetUserArgs)[];
 
     if (!key) throw new UserInputError('Nenhum campo foi informado!');
 
-    const value = partial[key];
+    const value = search[key];
 
     if (!value) throw new UserInputError('Nenhum valor foi informado!');
 
