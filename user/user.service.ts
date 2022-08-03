@@ -12,6 +12,7 @@ interface IUserService {
   readAll(): Promise<User[]>;
   read(search: GetUserArgs): Promise<User[]>;
   update(data: UpdateUserArgs): Promise<User[]>;
+  delete(userId: User['id']): Promise<boolean>;
 }
 
 class UserService implements IUserService {
@@ -84,6 +85,12 @@ class UserService implements IUserService {
       default:
         return [];
     }
+  }
+
+  async delete(userId: User['id']): Promise<boolean> {
+    const { body } = await this.repository().delete().match({ id: userId });
+
+    return !!(body && body.length > 0);
   }
 }
 
