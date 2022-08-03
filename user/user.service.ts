@@ -1,4 +1,5 @@
 import sbDB from '@/config/supabase';
+import DuplicatedEmailError from '@/user/errors/duplicated-email';
 import { CreateUserArgs } from '@/user/types/create-user.args';
 import { GetUserArgs } from '@/user/types/get-user.args';
 import { UpdateUserArgs } from '@/user/types/update-user.args';
@@ -30,9 +31,7 @@ class UserService implements IUserService {
       case 201:
         return body || [];
       case 409:
-        throw new UserInputError('Esse e-mail já foi utilizado!', {
-          fieldName: 'email',
-        });
+        throw new DuplicatedEmailError();
       default:
         return [];
     }
@@ -79,9 +78,7 @@ class UserService implements IUserService {
       case 200:
         return body || [];
       case 409:
-        throw new UserInputError('Esse e-mail já foi utilizado!', {
-          fieldName: 'email',
-        });
+        throw new DuplicatedEmailError();
       default:
         return [];
     }
