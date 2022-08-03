@@ -1,5 +1,6 @@
 import { CreateUserArgs } from '@/user/types/create-user.args';
 import { GetUserArgs } from '@/user/types/get-user.args';
+import { UpdateUserArgs } from '@/user/types/update-user.args';
 import User from '@/user/user.entity';
 import UserService from '@/user/user.service';
 
@@ -26,5 +27,10 @@ export class UserResolver {
   @Query(() => [User])
   async getUser(@Args() args: GetUserArgs): Promise<User[]> {
     return this.userService.read(args);
+  }
+
+  @Mutation(() => [User])
+  async updateUser(@Args() args: UpdateUserArgs): Promise<User[]> {
+    return this.userService.update(args);
   }
 }
