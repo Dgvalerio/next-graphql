@@ -1,4 +1,5 @@
 import { CreateUserArgs } from '@/user/types/create-user.args';
+import { GetUserArgs } from '@/user/types/get-user.args';
 import User from '@/user/user.entity';
 import UserService from '@/user/user.service';
 
@@ -20,5 +21,10 @@ export class UserResolver {
   @Query(() => [User])
   async getUsers(): Promise<User[]> {
     return this.userService.readAll();
+  }
+
+  @Query(() => [User])
+  async getUser(@Args() args: GetUserArgs): Promise<User[]> {
+    return this.userService.read(args);
   }
 }

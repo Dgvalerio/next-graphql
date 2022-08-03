@@ -1,5 +1,6 @@
 import sbDB from '@/config/supabase';
 import { CreateUserArgs } from '@/user/types/create-user.args';
+import { GetUserArgs } from '@/user/types/get-user.args';
 import User from '@/user/user.entity';
 import { SupabaseQueryBuilder } from '@supabase/supabase-js/dist/module/lib/SupabaseQueryBuilder';
 
@@ -38,6 +39,25 @@ class UserService implements IUserRepository {
 
   async readAll(): Promise<User[]> {
     const { status, body } = await this.repository.select();
+
+    switch (status) {
+      case 200:
+        return body || [];
+      default:
+        return [];
+    }
+  }
+
+  async read(partial: GetUserArgs): Promise<User[]> {
+    const [key] = Object.keys(partial) as (keyof GetUserArgs)[];
+
+    if (!key) throw new UserInputError('Nenhum campo foi informado!');
+
+    const value = partial[key];
+
+    if (!value) throw new UserInputError('Nenhum valor foi informado!');
+
+    const { status, body } = await this.repository.select().eq(key, value);
 
     switch (status) {
       case 200:
