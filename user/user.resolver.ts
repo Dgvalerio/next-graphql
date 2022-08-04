@@ -1,7 +1,7 @@
-import { CreateUserArgs } from '@/user/types/create-user.args';
-import { DeleteUserArgs } from '@/user/types/delete-user.args';
-import { GetUserArgs } from '@/user/types/get-user.args';
-import { UpdateUserArgs } from '@/user/types/update-user.args';
+import CreateUserArgs from '@/user/types/create-user.args';
+import DeleteUserArgs from '@/user/types/delete-user.args';
+import GetUserArgs from '@/user/types/get-user.args';
+import UpdateUserArgs from '@/user/types/update-user.args';
 import User from '@/user/user.entity';
 import UserService from '@/user/user.service';
 
@@ -17,7 +17,7 @@ interface IUserResolver {
 }
 
 @Resolver()
-export class UserResolver implements IUserResolver {
+class UserResolver implements IUserResolver {
   userService: UserService;
 
   constructor() {
@@ -49,3 +49,5 @@ export class UserResolver implements IUserResolver {
     return this.userService.delete(id);
   }
 }
+
+export default UserResolver;

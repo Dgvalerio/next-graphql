@@ -114,6 +114,7 @@
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "new-cap": "off"
+    "new-cap": "off",
+    "import/prefer-default-export": "error"
   }
 }

@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ArgsType, Field } from 'type-graphql';
 
 @ArgsType()
-export class UpdateUserArgs {
+class UpdateUserArgs {
   @Field()
   @IsString()
   @IsNotEmpty()
@@ -20,3 +20,5 @@ export class UpdateUserArgs {
   @IsOptional()
   email?: string;
 }
+
+export default UpdateUserArgs;

@@ -1,14 +1,15 @@
 import sbDB from '@/config/supabase';
 import DuplicatedEmailError from '@/user/errors/duplicated-email';
-import { CreateUserArgs } from '@/user/types/create-user.args';
-import { GetUserArgs } from '@/user/types/get-user.args';
-import { UpdateUserArgs } from '@/user/types/update-user.args';
+import CreateUserArgs from '@/user/types/create-user.args';
+import GetUserArgs from '@/user/types/get-user.args';
+import UpdateUserArgs from '@/user/types/update-user.args';
 import User from '@/user/user.entity';
 import { SupabaseQueryBuilder } from '@supabase/supabase-js/dist/module/lib/SupabaseQueryBuilder';
 
 import { UserInputError } from 'apollo-server-micro';
 
 interface IUserService {
+  repository(): SupabaseQueryBuilder<User>;
   create(user: CreateUserArgs): Promise<User[]>;
   readAll(): Promise<User[]>;
   read(search: GetUserArgs): Promise<User[]>;
@@ -17,7 +18,7 @@ interface IUserService {
 }
 
 class UserService implements IUserService {
-  private repository(): SupabaseQueryBuilder<User> {
+  repository(): SupabaseQueryBuilder<User> {
     return sbDB.from('user');
   }
 
