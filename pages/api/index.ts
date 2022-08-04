@@ -1,7 +1,8 @@
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { UserResolver } from '@/user/user.resolver';
+import OperationTypeResolver from '@/operation-type/operation-type.resolver';
+import UserResolver from '@/user/user.resolver';
 
 import { ApolloServer } from 'apollo-server-micro';
 import { RequestHandler } from 'micro';
@@ -12,7 +13,7 @@ import { buildSchemaSync } from 'type-graphql';
 const cors = Cors();
 
 const schema = buildSchemaSync({
-  resolvers: [UserResolver],
+  resolvers: [UserResolver, OperationTypeResolver],
   emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
 });
 
